@@ -1,0 +1,6 @@
+{
+  "name": "VC with TorchScript",
+  "description": "Voice Conversion built using TorchScript",
+  "repository": "https://github.com/SolomidHero/voice-conversion-flask-heroku",
+  "keywords": ["python", "flask", "pytorch", "bootstrap"]
+}
