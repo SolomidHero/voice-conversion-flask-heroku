@@ -1,3 +1,4 @@
+-e git+https://github.com/numba/numba.git@0.53.0rc1
 torch==1.7.1
 tqdm==4.55.0
 resampy==0.2.2
