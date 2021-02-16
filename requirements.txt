@@ -1,5 +1,5 @@
 numba -e git+https://github.com/numba/numba.git@0.53.0rc1
-torch==1.7.1
+cpu/torch-1.7.1%2Bcpu-cp38-cp38-linux_x86_64.whl
 tqdm==4.55.0
 resampy==0.2.2
 jsonargparse==3.5.0
