@@ -1,5 +1,4 @@
 import os
-import io
 
 from flask import Flask, render_template, request, redirect
 
@@ -8,9 +7,7 @@ import soundfile as sf
 import base64
 
 from inference import get_prediction
-from utils import transform_audio, required_sr, load_models
-from scipy.io.wavfile import write
-
+from utils import transform_audio, read_audio, audio_to_bytes, required_sr, load_models
 
 app = Flask(__name__)
 
@@ -30,21 +27,19 @@ def upload_file():
         return
 
       print(f"FILE {key}: {file_obj}")
-      wav, sr = sf.read(file_obj)
+      wav, sr = read_audio(file_obj)
       wav = transform_audio(wav, sr)
       data.append(wav)
 
     result = get_prediction(data[0], data[1])
-    # result = data[0].cpu().numpy()
-    bytes_wav = bytes()
-    byte_io = io.BytesIO(bytes_wav)
-    write(byte_io, required_sr, result)
-    result_bytes = byte_io.read()
-    output = base64.b64encode(result_bytes).decode('UTF-8')
+    output = audio_to_bytes(result)
 
-    # print(output)
-
-    return render_template('result.html', snd=output)
+    return render_template(
+      'result.html',
+      snd=output,
+      src=audio_to_bytes(data[0].numpy()),
+      tgt=audio_to_bytes(data[1].numpy())
+    )
 
   return render_template('index.html')
 

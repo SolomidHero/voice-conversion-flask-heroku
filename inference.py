@@ -7,7 +7,7 @@ from engine.models import load_pretrained_wav2vec
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 ckpt_path = "./fragmentvc.pt"
-wav2vec_path = "./wav2vec_small.pt"
+wav2vec_path = "facebook/wav2vec2-base"
 vocoder_path = "./vocoder.pt"
 preemph = 0.97
 sample_rate = 16000

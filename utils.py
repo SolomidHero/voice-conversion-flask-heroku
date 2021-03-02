@@ -1,11 +1,18 @@
 import torch
 import resampy
 import os
+import io
+import base64
+
+
+from pydub import AudioSegment
+import numpy as np
+from scipy.io.wavfile import write
 
 required_sr = 16000
 
 models_info = [
-  ("./wav2vec_small.pt", "https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt"),
+  # ("./wav2vec_small.pt", "https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt"),
   ("./vocoder.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v1.2/vocoder.pt"),
   ("./fragmentvc.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v1.2/fragmentvc.pt"),
 ]
@@ -35,8 +42,23 @@ def load_models():
     _download(path, url)
 
 
+def audio_to_bytes(wav):
+  bytes_wav = bytes()
+  byte_io = io.BytesIO(bytes_wav)
+  write(byte_io, required_sr, wav)
+  result_bytes = byte_io.read()
+  output = base64.b64encode(result_bytes).decode('UTF-8')
+
+  return output
+
+
+def read_audio(file_obj):
+  audio = AudioSegment.from_file(file_obj)
+  return np.array(audio.get_array_of_samples()), audio.frame_rate
+
 def transform_audio(audio, sr):
   if len(audio.shape) >= 2:
     audio = audio.mean(-1)
+  audio = audio / abs(audio).max()
   audio = resampy.resample(audio, sr, required_sr)
   return torch.from_numpy(audio).float()
