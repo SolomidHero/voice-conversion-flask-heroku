@@ -1,2 +1,2 @@
-ffmpeg libasound2-dev python-dev python-numpy python-setuptools libsndfile-dev
+libasound2-dev python-dev python-numpy python-setuptools libsndfile-dev
 
