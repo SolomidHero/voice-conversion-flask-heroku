@@ -7,7 +7,7 @@ import soundfile as sf
 import base64
 
 from inference import get_prediction
-from utils import transform_audio, read_audio, audio_to_bytes, required_sr, load_models
+from common_utils import transform_audio, read_audio, audio_to_bytes, required_sr, load_models
 
 app = Flask(__name__)
 

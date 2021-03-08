@@ -1,3 +1,6 @@
 [submodule "engine"]
 	path = engine
 	url = https://github.com/SolomidHero/FragmentVC-with-RAdam
+[submodule "vocoder"]
+	path = vocoder
+	url = https://github.com/SolomidHero/hifi-gan

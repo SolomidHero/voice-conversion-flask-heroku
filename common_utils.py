@@ -4,7 +4,6 @@ import os
 import io
 import base64
 
-
 from pydub import AudioSegment
 import numpy as np
 from scipy.io.wavfile import write
@@ -13,8 +12,10 @@ required_sr = 16000
 
 models_info = [
   # ("./wav2vec_small.pt", "https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt"),
-  ("./vocoder.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v1.2/vocoder.pt"),
-  ("./fragmentvc.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v1.2/fragmentvc.pt"),
+  # ("./vocoder.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v1.2/vocoder.pt"),
+  ("./generator.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v3.0/generator_pt130"),
+  ("./generator_config.json", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v3.0/config_v1_4.json"),
+  ("./fragmentvc.pt", "https://github.com/SolomidHero/FragmentVC-with-RAdam/releases/download/v3.1/fragmentvc_v3_1_tuned.pt"),
 ]
 
 def _download(filepath, url, refresh=False, agent='wget'):

@@ -1,14 +1,21 @@
 import json
-
 import torch
-from utils import transform_audio
+import sys
+
+from common_utils import transform_audio
 from engine.data import load_wav, log_mel_spectrogram, plot_mel, plot_attn
 from engine.models import load_pretrained_wav2vec
+from vocoder.env import AttrDict
+
+sys.path.append("./vocoder")
+from vocoder.models import Generator
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 ckpt_path = "./fragmentvc.pt"
 wav2vec_path = "facebook/wav2vec2-base"
-vocoder_path = "./vocoder.pt"
+vocoder_path = "./generator.pt"
+vocoder_config_path = "./generator_config.json"
 preemph = 0.97
 sample_rate = 16000
 n_mels = 80
@@ -26,7 +33,10 @@ def convert(src_wav, tgt_wav):
   model = torch.jit.load(ckpt_path).to(device).eval()
   print("[INFO] FragmentVC is loaded from", ckpt_path)
 
-  vocoder = torch.jit.load(vocoder_path).to(device).eval()
+  vocoder_config = json.loads(open(vocoder_config_path).read())
+  vocoder = Generator(AttrDict(vocoder_config)).to(device).eval()
+  vocoder_state_dict = torch.load(vocoder_path, map_location=device)
+  vocoder.load_state_dict(vocoder_state_dict['generator'])
   print("[INFO] Vocoder is loaded from", vocoder_path)
 
   src_wav = torch.FloatTensor(src_wav).unsqueeze(0).to(device)
@@ -44,10 +54,9 @@ def convert(src_wav, tgt_wav):
     print("[INFO] source Wav2Vec feature shape:", src_feat.shape)
 
     out_mel, _ = model(src_feat, tgt_mel)
-    out_mel = out_mel.transpose(1, 2).squeeze(0)
     print("[INFO] converted spectrogram shape:", out_mel.shape)
 
-    out_wav = vocoder.generate([out_mel])[0]
+    out_wav = vocoder(out_mel).squeeze()
     out_wav = out_wav.cpu().numpy()
     print("[INFO] generated waveform shape:", out_wav.shape)
 
