@@ -11,11 +11,11 @@ from common_utils import transform_audio, read_audio, audio_to_bytes, required_s
 
 app = Flask(__name__)
 
+load_models()
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
   if request.method == 'POST':
-    load_models()
     data = []
     for key in ['source', 'target']:
       if key not in request.files:
