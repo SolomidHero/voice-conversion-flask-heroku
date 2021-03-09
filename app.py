@@ -31,6 +31,7 @@ def upload_file():
       wav = transform_audio(wav, sr)
       data.append(wav)
 
+    print("Converting...")
     result = get_prediction(data[0], data[1])
     output = audio_to_bytes(result)
 
