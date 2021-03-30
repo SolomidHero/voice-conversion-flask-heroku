@@ -1,0 +1,79 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://vc-pytorch.herokuapp.com/'
+info:
+  description: >-
+    This is a simple server presenting voice conversion powered with pytorch and flask.
+    For this sample, you can use the api key `special-key` to test the authorization filters.
+  version: 1.0.0
+  title: OpenAPI pytorch-vc-heroku-flask
+  license:
+    name: Apache-2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: vc
+    description: voice conversion engine/data/etc
+paths:
+  /:
+    get:
+      tags:
+        - vc
+      summary: Load main page
+      description: Upload source and target audio files for voice conversion
+      operationId: upload_file_get
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                # $ref: '#/components/schemas/ApiResponse'
+                type: string
+        '400':
+          description: Invalid status value
+    post:
+      tags:
+        - vc
+      summary: Upload source and target
+      description: ''
+      operationId: upload_file_post
+      # parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                source:
+                  description: target file to upload
+                  type: ReadStream # string
+                  # format: binary
+                target:
+                  description: target file to upload
+                  type: ReadStream # string
+                  # format: binary
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+components:
+  schemas:
+    ApiResponse:
+      title: An uploaded response
+      description: Describes the result of uploading an audio resource
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
