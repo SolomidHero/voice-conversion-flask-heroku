@@ -113,3 +113,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vagrant
+**/.tmp_ssh_config
+**/.vagrant
